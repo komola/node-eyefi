@@ -1,4 +1,3 @@
-// Based off of https://raw.github.com/grantyn/EyeFiServer/master/Release%202.0/EyeFiServer.py
 /**
  * Module dependencies.
  */
@@ -20,7 +19,7 @@ app.configure(function(){
 });
 
 app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
 app.configure('production', function(){
