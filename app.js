@@ -1,4 +1,4 @@
-
+// Based off of https://raw.github.com/grantyn/EyeFiServer/master/Release%202.0/EyeFiServer.py
 /**
  * Module dependencies.
  */
@@ -30,6 +30,8 @@ app.configure('production', function(){
 // Routes
 
 app.get('/', routes.index);
+app.get('/api/soap/eyefilm/v1', routes.soap);
+app.get('/api/soap/eyefilm/v1/upload', routes.upload);
 
-app.listen(3000);
+app.listen(59278);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
