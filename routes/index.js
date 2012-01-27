@@ -4,6 +4,8 @@ var qs = require("querystring"),
     md5 = require("MD5");
 var config = require("../config");
 var crypto = require("crypto");
+var tar = require("tar");
+var fs = require("fs");
 
 /*
  * GET home page.
@@ -52,8 +54,17 @@ exports.index = function(req, res){
 };
 
 exports.upload = function(req, res) {
-  console.log(req.headers);
-  res.send("asfd");
+  console.log(req.files.FILENAME.path);
+fs.createReadStream(req.files.FILENAME.path)
+  .pipe(tar.Extract({ path: __dirname + "/extract" }))
+  .on("error", function (er) {
+    console.error("error here")
+  })
+  .on("end", function () {
+    console.error("done")
+  })
+  console.log("LET ME UPLOAD!");
+  
 };
 
 exports.soap = function(req, res) {  
@@ -98,6 +109,28 @@ exports.soap = function(req, res) {
       break;
     case "GetPhotoStatus":
       console.log("GetPhotoStatus");
+      var body = '';
+      var parsedbody = '';
+        req.on('data', function (data) {
+            body += data;
+            //console.log(data);
+        });
+        req.on('end', function () {
+
+            var POST = qs.stringify(qs.parse(body));
+            POST = decodeURIComponent(POST);
+            // use POST
+            console.log(decodeURIComponent(POST));
+            parser.parseString(POST, function(err, data) {
+              var obj = data["SOAP-ENV:Body"]["ns1:GetPhotoStatus"];
+              var credential = md5HexDigest(obj.macaddress + config.cards[obj.macaddress].uploadkey + "d7eda40e374e8a34ee97554ebbfea0b5");
+              console.log(credential);
+              console.log(obj.credential);
+              res.send('<?xml version="1.0" encoding="UTF-8"?><SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Body><GetPhotoStatusResponse xmlns="http://localhost/api/soap/eyefilm"><fileid>1</fileid><offset>0</offset></GetPhotoStatusResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>');
+
+            });
+            
+        });
       break;
     case "MarkLastPhotoInRoll":
       console.log("MarkLastPhotoInRoll");
