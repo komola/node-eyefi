@@ -20,6 +20,7 @@ Simplfy clone the repository, run npm install and start the app.
 ## Usage
 
 First. Setup your card so that it sends the jpg or raw file to a computer. For the moment you should consider turning off any other features such as FTP Upload, GeoTagging, etc.
+
 Second. Change the config so it does what you want it to :)
 
 Third. Start the server.

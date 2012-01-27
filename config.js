@@ -4,20 +4,21 @@ module.exports = {
 	folder: './pictures/', //required
 
 	// All cards should be listed here.
-	cards: {
+	cards: 
+	[
 		{
 			// This is the Mac Address which can be found in the Settings.xml
-			{mac: '0045sdasd23'}, // required
+			mac: '0045sdasd23', // required
 			// This is the UploadKey as found in the Settings.xml
-			{UploadKey: 'c686e547e3728c63a8f78729c1592757'}, // required
-			{folder: '/usr/images/all'}, // optional
-			{command: 'cat %1'}, // optional
+			uploadkey: 'c686e547e3728c63a8f78729c1592757', // required
+			folder: '/usr/images/all', // optional
+			command: 'cat %1', // optional
 		},
 		{
-			{mac: '0045sdadfersd23'}, // required
-			{UploadKey: 'c686e547e3728c63a8fasd729c1592757'}, // required
+			mac: '0045sdadfersd23', // required
+			uploadkey: 'c686e547e3728c63a8fasd729c1592757', // required
 		},
-	},
+	],
 
 	// If you need help finding a bug just turn on debugging.
 	debug: true // true or false
