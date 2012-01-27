@@ -7,8 +7,6 @@ var express = require('express')
 
 var config = require("./config");
 
-console.log(config.cards[0].mac);
-
 var app = module.exports = express.createServer();
 
 // Configuration
