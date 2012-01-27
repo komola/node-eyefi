@@ -62,6 +62,7 @@ fs.createReadStream(req.files.FILENAME.path)
   })
   .on("end", function () {
     console.error("done")
+    res.send('<?xml version="1.0" encoding="UTF-8"?><SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Body><UploadPhotoResponse xmlns="http://localhost/api/soap/eyefilm"><success>true</success></UploadPhotoResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>');
   })
   console.log("LET ME UPLOAD!");
   
@@ -133,7 +134,7 @@ exports.soap = function(req, res) {
         });
       break;
     case "MarkLastPhotoInRoll":
-      console.log("MarkLastPhotoInRoll");
+      res.send('<?xml version="1.0" encoding="UTF-8"?><SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Body><MarkLastPhotoInRollResponse xmlns="http://localhost/api/soap/eyefilm" /></SOAP-ENV:Body></SOAP-ENV:Envelope>');
       break;
     default:
       console.log("Different request", req.headers);
