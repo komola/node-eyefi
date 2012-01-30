@@ -32,7 +32,7 @@ exports.upload = function(req, res) {
   })
   .on("end", function () {
     console.error("done")
-    res.render('uploadSucces', {layout: false});
+    res.render('uploadSuccess', {layout: false});
   })
   console.log("LET ME UPLOAD!");
   
@@ -55,7 +55,7 @@ exports.soap = function(req, res) {
   var renderGetPhotoStatus = function(err, data) {
     var obj = data["SOAP-ENV:Body"]["ns1:GetPhotoStatus"];
     var credential = md5HexDigest(obj.macaddress + config.cards[obj.macaddress].uploadkey + "d7eda40e374e8a34ee97554ebbfea0b5");
-    res.render('GetPhotoStatus', {layout:false});
+    res.render('getPhotoStatus', {layout:false});
   };
 
   var getData = function(callback) {
