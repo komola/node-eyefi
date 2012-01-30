@@ -1,5 +1,5 @@
 {
-    "name": "application-name"
+    "name": "Eye-Fi Server in Node"
   , "version": "0.0.1"
   , "private": true
   , "dependencies": {
@@ -9,5 +9,7 @@
     , "xml2js": ">= 0.0.1"
     , "tar": ">= 0.0.1"
     , "ejs": ">= 0.0.1"
+    , "formidable": ">= 0.0.1"
+    , "progress-bar": ">= 0.0.1"
   }
 }

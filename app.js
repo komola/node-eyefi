@@ -4,6 +4,7 @@
 
 var express = require('express')
   , routes = require('./routes')
+  , formidable = require("formidable");
 
 var config = require("./config");
 
@@ -12,6 +13,19 @@ var app = module.exports = express.createServer();
 // Configuration
 
 app.configure(function(){
+  app.use(function(req, res, next){
+    if (req.url == '/api/soap/eyefilm/v1/upload') {
+      var form = new formidable.IncomingForm();
+        console.log("Upload startet");  
+        bar = require("progress-bar").create(process.stdout);
+      
+      form.on('progress', function(received, expected) {
+        bar.update(received/expected);
+      });
+      form.parse(req);
+    }
+    next();
+  });
   app.set('views', __dirname + '/views');
   app.register("html", require('ejs'));
   app.set('view engine', 'html');
