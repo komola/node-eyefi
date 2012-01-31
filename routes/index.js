@@ -10,10 +10,6 @@ var qs = require("querystring"),
     child,
     path = require("path");
 
-/*
- * GET home page.
- */
-
 function md5HexDigest(data)
 {
   var string = new Buffer(data, "hex");
@@ -22,10 +18,16 @@ function md5HexDigest(data)
   return hash.digest("hex");  
 }
 
-
+/*
+ * Human index file :)
+ */
 exports.index = function(req, res){
-  res.render('index', { title: 'Express' })
+  res.render('index', {layout: false});
 };
+
+/*
+ * Upload file command.
+ */
 
 exports.upload = function(req, res) {
   var renderUpload = function(err, data) {
@@ -55,7 +57,7 @@ exports.upload = function(req, res) {
             }
           });
         }
-        console.log("UploadSuccess");
+        console.log("\nFinished Upload successfully.");
         res.render('uploadSuccess', {layout: false});
       })
 
@@ -66,14 +68,14 @@ exports.upload = function(req, res) {
   parser.parseString(decodedBody, renderUpload); 
 };
 
+/*
+ * All other commands that don't have anything to do with uploading.
+ */
+
 exports.soap = function(req, res) {  
   //api.eye.fi:80
   //StartSession
   //GetCardSettings
-  //?:59278
-  //StartSession
-  //GetPhotoStatus
-  //MarkLastPhotoInRoll
   var renderStartSession = function(err, data) {
     var obj = data["SOAP-ENV:Body"]["ns1:StartSession"];
     var credential = md5HexDigest(obj.macaddress + obj.cnonce + config.cards[obj.macaddress].uploadkey);
@@ -86,6 +88,12 @@ exports.soap = function(req, res) {
     res.render('getPhotoStatus', {layout:false});
   };
 
+  var renderMarkLastPhotoInRoll = function(err, data) {
+    res.render('markLastPhotoInRoll', {layout: false});
+  };
+  /*
+   * Get add data in the SOAP-Request
+   */
   var getData = function(callback) {
     var body = '';
     var parsedbody = '';
@@ -98,9 +106,12 @@ exports.soap = function(req, res) {
     });
   };
 
+  /*
+   * Decide what kind of SOAP request this was.
+   */
   switch(req.headers.soapaction.substr(5, req.headers.soapaction.length-6)) {
     case "StartSession":
-      console.log("startsession");
+      console.log("StartSession");
       //console.log(req.params);
       getData(renderStartSession);
       break;
@@ -109,10 +120,11 @@ exports.soap = function(req, res) {
       getData(renderGetPhotoStatus);
       break;
     case "MarkLastPhotoInRoll":
-      res.render('markLastPhotoInRoll', {layout: false});
+      console.log("MarkLastPhotoInRoll");
+      getData(renderMarkLastPhotoInRoll);
       break;
     default:
-      console.log("Different request", req.headers);
+      console.log("Different request - We don't really know what to do!", req.headers);
       var length = req.headers.soapaction.length;
       console.log(length-2);
       console.log(req.headers.soapaction.substr(5, req.headers.soapaction.length-6));

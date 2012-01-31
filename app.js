@@ -16,9 +16,9 @@ app.configure(function(){
   app.use(function(req, res, next){
     if (req.url == '/api/soap/eyefilm/v1/upload') {
       var form = new formidable.IncomingForm();
-        console.log("Upload startet");  
-        bar = require("progress-bar").create(process.stdout);
-      
+      console.log("Starting upload");  
+      bar = require("progress-bar").create(process.stdout);
+      bar.width = 25;
       form.on('progress', function(received, expected) {
         bar.update(received/expected);
       });
@@ -50,4 +50,4 @@ app.post('/api/soap/eyefilm/v1', routes.soap);
 app.post('/api/soap/eyefilm/v1/upload', routes.upload);
 
 app.listen(59278);
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+console.log("The Node-Eyefi Server was successfully started and is listening.");
