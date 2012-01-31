@@ -1,5 +1,3 @@
-#WORK IN PROGRESS!!!
-
 # Node-Eyefi
 
 We are creating a platform independant Eyefi Server written in Node. With a very focused feature set.
