@@ -7,7 +7,7 @@ We are creating a platform independant Eyefi Server written in Node. With a very
 Features include:
 - Store received files in folder
 - Execute command after file has been received
-- JPEG only.
+- JPEG, RAW & MOV
 - Multiple cards
 
 ## Installation
@@ -19,7 +19,7 @@ Simplfy clone the repository, run npm install and start the app.
 
 ## Usage
 
-First. Setup your card so that it sends the jpg or raw file to a computer. For the moment you should consider turning off any other features such as FTP Upload, GeoTagging, etc.
+First. Setup your card so that it sends files to a computer. Also make sure that TransferRelay is turned OFF
 
 Second. Change the config so it does what you want it to :)
 
@@ -35,9 +35,9 @@ As soon as an image comes in, we'll inform you in the console.
 
 ## Todo
 
-- Get it to work :P
 - GeoTagging
-- RAW Files next to JPEG
+- Create JPEG previews for RAW files
+- Different Config
 
 ## Issues?
 
