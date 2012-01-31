@@ -4,7 +4,11 @@ var qs = require("querystring"),
     config = require("../config"),
     crypto = require("crypto"),
     tar = require("tar"),
-    fs = require("fs");
+    fs = require("fs"),
+    util = require("util"),
+    exec  = require('child_process').exec,
+    child,
+    path = require("path");
 
 /*
  * GET home page.
@@ -24,18 +28,42 @@ exports.index = function(req, res){
 };
 
 exports.upload = function(req, res) {
-  console.log(req.files.FILENAME);
-  fs.createReadStream(req.files.FILENAME.path)
-  .pipe(tar.Extract({ path: __dirname + "/extract" }))
-  .on("error", function (err) {
-    console.error("error here")
-  })
-  .on("end", function () {
-    console.error("done")
-    res.render('uploadSuccess', {layout: false});
-  })
-  console.log("LET ME UPLOAD!");
-  
+  var renderUpload = function(err, data) {
+    var obj = data["SOAP-ENV:Body"]["ns1:UploadPhoto"];
+    var folder = config.folder;
+    if(config.cards[obj.macaddress].folder) {
+      folder = config.cards[obj.macaddress].folder;
+    }
+
+    fs.createReadStream(req.files.FILENAME.path)
+      .pipe(tar.Extract({ path: folder }))
+      .on("error", function (err) {
+        console.error("error here")
+      })
+      .on("end", function () {
+        if(config.cards[obj.macaddress].command) {
+          var file = folder+req.files.FILENAME.filename.substr(0, req.files.FILENAME.filename.length -4);
+          
+          console.log(file);
+          var command = util.format(config.cards[obj.macaddress].command, path.normalize(file));
+          console.log(command);
+          child = exec(command, function (error, stdout, stderr) {
+            console.log('stdout: ' + stdout);
+            console.log('stderr: ' + stderr);
+            if (error !== null) {
+              console.log('exec error: ' + error);
+            }
+          });
+        }
+        console.log("UploadSuccess");
+        res.render('uploadSuccess', {layout: false});
+      })
+
+    
+  };
+
+  var decodedBody = decodeURIComponent(qs.stringify(qs.parse(req.body.SOAPENVELOPE)));
+  parser.parseString(decodedBody, renderUpload); 
 };
 
 exports.soap = function(req, res) {  
