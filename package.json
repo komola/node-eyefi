@@ -1,5 +1,5 @@
 {
-    "name": "Eye-Fi Server in Node"
+    "name": "node-eyefi"
   , "version": "0.0.1"
   , "private": true
   , "dependencies": {
