@@ -12,15 +12,21 @@ var app = module.exports = express.createServer();
 
 // Configuration
 
+//var progressBars = {};
+
 app.configure(function(){
   app.use(function(req, res, next){
+  	console.log(req.connection.remoteAddress);
     if (req.url == '/api/soap/eyefilm/v1/upload') {
       var form = new formidable.IncomingForm();
+      var old = 0;
       console.log("Starting upload");  
-      bar = require("progress-bar").create(process.stdout);
-      bar.width = 25;
+      //We can't use progressbars because there are two files at the same time.
       form.on('progress', function(received, expected) {
-        bar.update(received/expected);
+        //console.log(this.requestHeader);
+        if(old != Math.round(received*100/expected) && Math.round(received*100/expected) % 10 == 0)
+         console.log(Math.round(received*100/expected));
+        old = Math.round(received*100/expected)
       });
       form.parse(req);
     }

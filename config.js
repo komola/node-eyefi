@@ -9,13 +9,12 @@ module.exports = {
 		'00185642b77d':{
 			// This is the UploadKey as found in the Settings.xml
 			uploadkey: '50333eaad68ce9f73db40bad23a2952c', // required
-			//folder: './pics/', // optional
+			folder: './pics/', // optional
 			//command: 'cat %s', // optional
 		},
 
-		'0045sdadfersd23' : {
-			mac: '0045sdadfersd23', // required
-			uploadkey: 'c686e547e3728c63a8fasd729c1592757', // required
+		'00185650f586' : {
+			uploadkey: 'f3bc423f3bda7247e0807e844baebdcc', // required
 		},
 	},
 
