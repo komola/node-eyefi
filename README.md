@@ -45,4 +45,4 @@ If you open an Issue, state as much information as possible such as: Eye-FI Firm
 
 ## Thanks
 
-The documentation was taken from https://github.com/tachang/EyeFiServer
+The documentation was taken from https://github.com/tachang/EyeFiServer and https://github.com/kristofg/rifec
