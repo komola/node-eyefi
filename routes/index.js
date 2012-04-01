@@ -57,6 +57,8 @@ exports.upload = function(req, res) {
             }
           });
         }
+        console.log(req.socket._idleStart.getTime());
+        console.log(new Date().getTime());
         console.log("\nFinished Upload successfully.");
         res.render('uploadSuccess', {layout: false});
       })

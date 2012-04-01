@@ -19,14 +19,22 @@ app.configure(function(){
   	console.log(req.connection.remoteAddress);
     if (req.url == '/api/soap/eyefilm/v1/upload') {
       var form = new formidable.IncomingForm();
+      var startTime = new Date();
       var old = 0;
       console.log("Starting upload");  
+      console.log(new Date().getTime());
       //We can't use progressbars because there are two files at the same time.
       form.on('progress', function(received, expected) {
         //console.log(this.requestHeader);
         if(old != Math.round(received*100/expected) && Math.round(received*100/expected) % 10 == 0)
          console.log(Math.round(received*100/expected));
         old = Math.round(received*100/expected)
+      });
+      form.on('end', function() {
+        var timeTaken = (new Date().getTime() - startTime.getTime()) / 1000;
+console.log((req.headers['content-length']/1024)/timeTaken + " kb/s")
+console.log(timeTaken);
+        
       });
       form.parse(req);
     }
