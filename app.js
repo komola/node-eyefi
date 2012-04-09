@@ -1,6 +1,13 @@
 /**
  * Module dependencies.
  */
+require("./logger").init();
+var logger = require('./logger').logger;
+logger.use(require('devnull/transports/stream'), {
+    stream: require('fs').createWriteStream('loggers.log')
+});
+
+logger.log("test");
 
 var express = require('express')
   , routes = require('./routes')
@@ -22,7 +29,6 @@ app.configure(function(){
       var startTime = new Date();
       var old = 0;
       console.log("Starting upload");  
-      console.log(new Date().getTime());
       //We can't use progressbars because there are two files at the same time.
       form.on('progress', function(received, expected) {
         //console.log(this.requestHeader);
@@ -32,9 +38,10 @@ app.configure(function(){
       });
       form.on('end', function() {
         var timeTaken = (new Date().getTime() - startTime.getTime()) / 1000;
-console.log((req.headers['content-length']/1024)/timeTaken + " kb/s")
-console.log(timeTaken);
-        
+        var kbs = ((req.headers['content-length']/1024)/timeTaken);
+        console.log(timeTaken + " - " + kbs + "kb/s");
+        console.log(req);
+//        logger.log((req.headers['content-length']/1024) + " - "+ timeTaken + " (" + kbs + "kb/s)");
       });
       form.parse(req);
     }
