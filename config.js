@@ -19,8 +19,8 @@ module.exports = {
 	},
 
 	// If you need help finding a bug just turn on debugging.
-	debug: true // true or false
+	debug: true, // true or false
 
         // Posts the image to a webserver
-        //post: "http://localhost/photos"
+        post: "http://localhost/photos"
 };
