@@ -8,7 +8,11 @@ var qs = require("querystring"),
     util = require("util"),
     exec  = require('child_process').exec,
     child,
-    path = require("path");
+    path = require("path"),
+    multiparter = require("multiparter"),
+    http = require("http"),
+    mime = require("mime"),
+    url = require("url");
 
 function md5HexDigest(data)
 {
@@ -43,8 +47,8 @@ exports.upload = function(req, res) {
         console.error("error here")
       })
       .on("end", function () {
+        var file = folder+req.files.FILENAME.filename.substr(0, req.files.FILENAME.filename.length -4);
         if(config.cards[obj.macaddress].command) {
-          var file = folder+req.files.FILENAME.filename.substr(0, req.files.FILENAME.filename.length -4);
           
           console.log(file);
           var command = util.format(config.cards[obj.macaddress].command, path.normalize(file));
@@ -56,6 +60,56 @@ exports.upload = function(req, res) {
               console.log('exec error: ' + error);
             }
           });
+        }
+
+        if(config.post) {
+          var settings = url.parse(config.post);
+          var request = new multiparter.request(http, {
+            host: settings.hostname,
+            port: settings.post, 
+            path: settings.pathname,
+            method: "POST"
+          });
+
+
+          request.addStream(
+'file', 
+path.basename(file),
+mime.lookup(file),
+fs.statSync(file).size,
+fs.createReadStream(file));
+
+          request.send(function(error, response) {
+  if (error) {
+        console.log(error);
+    }
+
+    var data = "";
+
+    response.setEncoding("utf8");
+
+    response.on("data", function(chunk) {
+        data += chunk;
+    });
+
+    response.on("end", function() {
+        console.log("Data: " + data);
+    });
+
+    response.on("error", function(error) {
+        console.log(error);
+    });
+          });
+/*          fs.readFile(file, function (err, data) {
+            console.log(err);
+            console.log(data);
+            request.post({uri: "http://localhost:3000/photos"
+            , body: data
+            , form: true
+              }, function (error, response, body) {
+	  	console.log(error);
+            });
+          });*/
         }
         console.log(req.socket._idleStart.getTime());
         console.log(new Date().getTime());

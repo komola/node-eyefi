@@ -12,5 +12,7 @@
     , "formidable": ">= 0.0.1"
     , "progress-bar": ">= 0.0.1"
     , "devnull": ">= 0.0.1"
+    , "multiparter": ">= 0.0.1"
+    , "mime": ">= 0.0.1"
   }
 }

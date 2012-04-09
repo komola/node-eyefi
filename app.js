@@ -3,11 +3,10 @@
  */
 require("./logger").init();
 var logger = require('./logger').logger;
-logger.use(require('devnull/transports/stream'), {
+/*logger.use(require('devnull/transports/stream'), {
     stream: require('fs').createWriteStream('loggers.log')
-});
+});*/
 
-logger.log("test");
 
 var express = require('express')
   , routes = require('./routes')
