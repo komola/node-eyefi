@@ -82,9 +82,9 @@ cd $DIR
 export PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin:/$HOME/local/bin:${PATH:=}
 export MANPATH=$HOME/local/man:${MANPATH:=}
 export LD_LIBRARY_PATH=$HOME/local/lib:${LD_LIBRARY_PATH:=}
+export HOME=/root
 
-
-################################################################################
+###############################################################################
 ################################################################################
 ##                                                                            ##
 #                       FOREVER section                                        #
@@ -92,14 +92,13 @@ export LD_LIBRARY_PATH=$HOME/local/lib:${LD_LIBRARY_PATH:=}
 ################################################################################
 ################################################################################
 
-
 running() {
 	forever list 2>/dev/null | grep ${APP} 2>&1 >/dev/null
     return $?
 }
 
 start_server() {
-	forever start -p /root/.forward/ ${APP} ${OPTIONS} 2>&1 >/dev/null
+	forever start ${APP} ${OPTIONS} 2>&1 >/dev/null
 	return $?
 }
 
