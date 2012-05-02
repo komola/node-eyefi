@@ -60,7 +60,6 @@
 # !!! /tmp/foo      # Created by the command "express /tmp/foo"
 # !!! /tmp/foo.sh   # This script 
 # !!! 
-
 DESC="node-eyefi"
 NAME="app.js"
 DIR=`/usr/bin/dirname $(/bin/readlink -f $0)`

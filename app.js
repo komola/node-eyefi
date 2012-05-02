@@ -1,3 +1,17 @@
+try {
+  process.setgid("node");
+}
+catch (err) {
+  console.log("Setting Group failed");
+}
+
+try {
+  process.setuid("node");
+}
+catch (err) {
+  console.log("Setting User failed");
+}
+
 /**
  * Module dependencies.
  */
@@ -39,7 +53,6 @@ app.configure(function(){
         var timeTaken = (new Date().getTime() - startTime.getTime()) / 1000;
         var kbs = ((req.headers['content-length']/1024)/timeTaken);
         console.log(timeTaken + " - " + kbs + "kb/s");
-        console.log(req);
 //        logger.log((req.headers['content-length']/1024) + " - "+ timeTaken + " (" + kbs + "kb/s)");
       });
       form.parse(req);
