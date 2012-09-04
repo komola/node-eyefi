@@ -134,14 +134,18 @@ exports.soap = function(req, res) {
   //GetCardSettings
   var renderStartSession = function(err, data) {
     var obj = data["SOAP-ENV:Body"]["ns1:StartSession"];
-    var credential = md5HexDigest(obj.macaddress + obj.cnonce + config.cards[obj.macaddress].uploadkey);
-    res.render('startSession', {layout:false, "credential": credential, "snonce":"d7eda40e374e8a34ee97554ebbfea0b5", "transfermodetimestamp": obj.transfermodetimestamp});  
+    if(config.cards[obj.macaddress]) {
+      var credential = md5HexDigest(obj.macaddress + obj.cnonce + config.cards[obj.macaddress].uploadkey);
+      res.render('startSession', {layout:false, "credential": credential, "snonce":"d7eda40e374e8a34ee97554ebbfea0b5", "transfermodetimestamp": obj.transfermodetimestamp});  
+    }
   };
 
   var renderGetPhotoStatus = function(err, data) {
     var obj = data["SOAP-ENV:Body"]["ns1:GetPhotoStatus"];
-    var credential = md5HexDigest(obj.macaddress + config.cards[obj.macaddress].uploadkey + "d7eda40e374e8a34ee97554ebbfea0b5");
-    res.render('getPhotoStatus', {layout:false});
+    if(config.cards[obj.macaddress]) {
+      var credential = md5HexDigest(obj.macaddress + config.cards[obj.macaddress].uploadkey + "d7eda40e374e8a34ee97554ebbfea0b5");
+      res.render('getPhotoStatus', {layout:false});
+    }
   };
 
   var renderMarkLastPhotoInRoll = function(err, data) {
