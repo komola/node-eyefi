@@ -1,18 +1,18 @@
 var qs = require("querystring"),
     xml2js = require("xml2js"),
-    parser = new xml2js.Parser(),
     config = require("../config"),
     crypto = require("crypto"),
     tar = require("tar"),
     fs = require("fs"),
     util = require("util"),
     exec  = require('child_process').exec,
-    child,
     path = require("path"),
     multiparter = require("multiparter"),
     http = require("http"),
     mime = require("mime"),
     url = require("url");
+
+var child, parser = new xml2js.Parser(xml2js.defaults["0.1"]);
 
 function md5HexDigest(data)
 {
@@ -111,7 +111,7 @@ fs.createReadStream(file));
             });
           });*/
         }
-        console.log(req.socket._idleStart.getTime());
+        //console.log(req.socket._idleStart.getTime());
         console.log(new Date().getTime());
         console.log("\nFinished Upload successfully.");
         res.render('uploadSuccess', {layout: false});
