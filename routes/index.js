@@ -1,6 +1,6 @@
 var qs = require("querystring"),
     xml2js = require("xml2js"),
-    parser = new xml2js.Parser(),
+    parser = new xml2js.Parser(xml2js.defaults["0.1"]),
     config = require("../config"),
     crypto = require("crypto"),
     tar = require("tar"),
