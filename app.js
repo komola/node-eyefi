@@ -1,12 +1,12 @@
 try {
-  process.setgid("node");
+  process.setgid("prismabox");
 }
 catch (err) {
   console.log("Setting Group failed");
 }
 
 try {
-  process.setuid("node");
+  process.setuid("prismabox");
 }
 catch (err) {
   console.log("Setting User failed");
