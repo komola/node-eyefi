@@ -1,7 +1,7 @@
 
   
 exports.soap = require("./soap").soap
-exports.upload = require("./upload").soap
+exports.upload = require("./upload").upload
 
 
 # Human index file :)

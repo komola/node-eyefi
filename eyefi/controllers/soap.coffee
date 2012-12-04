@@ -11,57 +11,60 @@ md5HexDigest = (data) ->
   hash.digest "hex"  
 
 
+exports.soap = (req, res) -> 
+  config = @_config
+  logger = @_logger
 
-exports.soap = (req, res) ->  
   renderStartSession = (err, data) ->
     obj = data["SOAP-ENV:Envelope"]["SOAP-ENV:Body"][0]["ns1:StartSession"][0]		
     
-    if (config = @config.getCardConfig obj.macaddress)?
-      credential = md5HexDigest obj.macaddress + obj.cnonce + config.getUploadKey()
-      res.render 'startSession', 
+    if (cardConfig = config.getCardConfig obj.macaddress)?
+      credential = md5HexDigest obj.macaddress + obj.cnonce + cardConfig.getUploadKey()
+      res.render "startSession", 
         layout: false
         "credential": credential
         "snonce": "d7eda40e374e8a34ee97554ebbfea0b5"
         "transfermodetimestamp": obj.transfermodetimestamp  
-  
+    else
+      logger.warning "Config", "No config for card with mac ", obj.macaddress
   
   renderGetPhotoStatus = (err, data) ->
     obj = data["SOAP-ENV:Envelope"]["SOAP-ENV:Body"][0]["ns1:GetPhotoStatus"][0]
-    res.render 'getPhotoStatus', layout: false
+    res.render "getPhotoStatus", layout: false
 
 
   renderMarkLastPhotoInRoll = (err, data) ->
     res.render "markLastPhotoInRoll", layout: false
 
-# Get add data in the SOAP-Request
-
+  # Get add data in the SOAP-Request
   getData = (callback) ->
-    body = '';
-    parsedbody = '';
-    req.on 'data', (data) ->
+    body = "";
+    parsedbody = "";
+    req.on "data", (data) ->
       body += data
 
-    req.on 'end', ->
+    req.on "end", ->
       decodedBody = decodeURIComponent qs.stringify qs.parse body
       parser.parseString decodedBody, callback
 
-# Decide what kind of SOAP request this was.
 
-  switch req.headers.soapaction.substr 5, req.headers.soapaction.length - 6
+  soaprequest = req.headers.soapaction.substr 5, req.headers.soapaction.length - 6
+
+  logger.log "SoapRequest", soaprequest
+
+  # Decide what kind of SOAP request this was.
+  switch soaprequest
     when "StartSession"
-      console.log("StartSession");
-      getData(renderStartSession);
+      getData renderStartSession
 
     when "GetPhotoStatus"
-      console.log("GetPhotoStatus");
-      getData(renderGetPhotoStatus);
+      getData renderGetPhotoStatus
 
     when "MarkLastPhotoInRoll"
-      console.log("MarkLastPhotoInRoll");
-      getData(renderMarkLastPhotoInRoll);
+      getData renderMarkLastPhotoInRoll
 
     else
-      console.log("Different request - We don't really know what to do!", req.headers);
       length = req.headers.soapaction.length;
-      console.log(length-2);
-      console.log(req.headers.soapaction.substr(5, req.headers.soapaction.length-6));
+
+      logger.warning "SoapRequest", "Different request - We don't really know what to do! Headers: ", 
+        req.headers, length-2, soaprequest

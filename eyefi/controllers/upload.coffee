@@ -6,32 +6,34 @@ fs = require "fs"
 path = require "path"
 
 
-
 # Upload file command.
 
 exports.upload = (req, res) ->
+  config = @_config
+  logger = @_logger
+
+  logger.log "ImageUpload", "Accepting Upload Request"
+
   renderUpload = (err, data) ->
     obj = data["SOAP-ENV:Envelope"]["SOAP-ENV:Body"][0]["ns1:UploadPhoto"][0];
     
-    cardConfig = @config.getCardConfig obj.macaddress
+    cardConfig = config.getCardConfig obj.macaddress
     dir = cardConfig.getDirectory()
 
-    fs.createReadStream req.files.FILENAME.path
-      .pipe tar.Extract path: dir
-      .on "error", (err) ->
-        @_logError "error here" + err
+    stream = fs.createReadStream req.files.FILENAME.path
+    stream.pipe tar.Extract { path: dir }
+    stream.on "error", (err) ->
+      logger.error "ImageUpload", err
 
-      .on "end", ->
-        file = dir + req.files.FILENAME.filename.substr 0, req.files.FILENAME.filename.length - 4
-        cardConfig.handleUploadedImage file
+    stream.on "end", ->
+      file = dir + req.files.FILENAME.filename.substr 0, req.files.FILENAME.filename.length - 4
+      cardConfig.handleUploadedImage file, fs
 
-        _trace req.socket._idleStart.getTime()
-        _trace new Date().getTime()
-        _trace "\nFinished Upload successfully."
+      #logger.trace req.socket._idleStart.getTime()
+      logger.info "Finished Upload successfully."
 
-        res.render "uploadSuccess", layout: false
+      res.render "uploadSuccess", layout: false
 
 
   decodedBody = decodeURIComponent qs.stringify qs.parse req.body.SOAPENVELOPE
   parser.parseString decodedBody, renderUpload
-
