@@ -19,4 +19,4 @@ config = require "./config"
 listener = new eyefi.Listener logger, new eyefi.Config config
 listener.listen()
 
-logger.log "The Node-Eyefi Server was successfully started and is listening."
+logger.log "The Node-Eyefi Server is running."
