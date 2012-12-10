@@ -1,22 +1,26 @@
 
 logger = new (require "devnull") base: true
 
-###
-try
-  process.setgid "prismabox"
-catch err
-  logger.warning "Setting Group failed"
-
-try
-  process.setuid "prismabox"
-catch err
-  logger.warning "Setting User failed"
-###
-
-eyefi = require "./eyefi/eyefi"
 config = require "./config"
 
+if config.groupId?
+  try
+    process.setgid config.groupId
+  catch err
+    logger.warning "Setting Group failed"
+
+if config.userId?
+  try
+    process.setuid config.userId
+  catch err
+    logger.warning "Setting User failed"
+
+eyefi = require "./eyefi"
+
 listener = new eyefi.Listener logger, new eyefi.Config config
+listener.addImageUploadFinishedHandler new (require "./eyefi/imagehandlers/commandAction") logger
+listener.addImageUploadFinishedHandler new (require "./eyefi/imagehandlers/postWebrequestAction") logger
+
 listener.listen()
 
-logger.log "The Node-Eyefi Server is running."
+logger.info "The Node-Eyefi Server is running."

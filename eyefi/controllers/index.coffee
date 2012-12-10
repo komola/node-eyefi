@@ -1,8 +1,9 @@
 
   
 exports.soap = require("./soap").soap
-exports.upload = require("./upload").upload
-
+upl = require("./upload")
+exports.upload = upl.upload
+exports.preUpload = upl.preUpload
 
 # Human index file :)
  
